@@ -1,11 +1,12 @@
 import Boundary from './Boundary.js'
+import Pellet from './Pellet.js'
 
 class GameBoard {
 	static PARENT_DIR = './images/boardPieces'
 	static BOARD_START_POS_X = 100
 	static BOARD_START_POS_Y = 50
 
-	constructor() {
+	constructor(pellets) {
 		// this.map = [
 		// 	['┌', '-', '-', '-', '-', '-', '┐'],
 		// 	['|', ' ', ' ', ' ', ' ', ' ', '|'],
@@ -88,9 +89,23 @@ class GameBoard {
 					case '8':
 						this.addPiece(`${GameBoard.PARENT_DIR}/pipeConnectorLeft.png`, i, j)
 						break
+					case '.':
+						this.addPellet(pellets, i, j)
+						break
 				}
 			})
 		})
+	}
+
+	addPellet(pellets, i, j) {
+		pellets.push(
+			new Pellet({
+				position: {
+					x: j * Boundary.width + GameBoard.BOARD_START_POS_X + Boundary.width / 2,
+					y: i * Boundary.height + GameBoard.BOARD_START_POS_Y + Boundary.height / 2,
+				},
+			}),
+		)
 	}
 
 	addPiece(src, i, j) {
