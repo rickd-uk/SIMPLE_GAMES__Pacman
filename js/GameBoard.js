@@ -26,6 +26,8 @@ class GameBoard {
 				}
 			})
 		})
+	}
+	draw(c) {
 		this.boundaries.forEach((boundary) => {
 			boundary.draw(c)
 		})
