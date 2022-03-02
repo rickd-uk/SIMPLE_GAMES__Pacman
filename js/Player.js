@@ -22,36 +22,101 @@ class Player {
 		this.position.y += this.velocity.y
 	}
 
-	static set(c) {
-		const player = new Player({
-			position: {
-				x: Boundary.width + Boundary.width / 2,
-				y: Boundary.height + Boundary.height / 2,
-			},
-			velocity: {
-				x: 0,
-				y: 0,
-			},
-		})
-		player.draw(c)
-	}
-
-	move(c, { controller }) {
+	move({ c, controller, gameBoard }) {
 		const keys = controller.keys
 		const lastKey = controller.lastKey
 		this.velocity.y = 0
 		this.velocity.x = 0
 
 		if (keys.w.pressed && lastKey === 'w') {
-			this.velocity.y = -5
+			for (let i = 0; i < gameBoard.boundaries.length; i++) {
+				const boundary = gameBoard.boundaries[i]
+				if (
+					gameBoard.circleCollisionWithRectangle({
+						circle: {
+							...this,
+							velocity: {
+								x: 0,
+								y: -5,
+							},
+						},
+						rectangle: boundary,
+					})
+				) {
+					this.velocity.y = 0
+					break
+				} else {
+					this.velocity.y = -5
+				}
+			}
 		} else if (keys.s.pressed && lastKey === 's') {
-			this.velocity.y = 5
+			for (let i = 0; i < gameBoard.boundaries.length; i++) {
+				const boundary = gameBoard.boundaries[i]
+				if (
+					gameBoard.circleCollisionWithRectangle({
+						circle: {
+							...this,
+							velocity: {
+								x: 0,
+								y: 5,
+							},
+						},
+						rectangle: boundary,
+					})
+				) {
+					this.velocity.y = 0
+					break
+				} else {
+					this.velocity.y = 5
+				}
+			}
 		} else if (keys.a.pressed && lastKey === 'a') {
-			this.velocity.x = -5
+			for (let i = 0; i < gameBoard.boundaries.length; i++) {
+				const boundary = gameBoard.boundaries[i]
+				if (
+					gameBoard.circleCollisionWithRectangle({
+						circle: {
+							...this,
+							velocity: {
+								x: -5,
+								y: 0,
+							},
+						},
+						rectangle: boundary,
+					})
+				) {
+					this.velocity.x = 0
+					break
+				} else {
+					this.velocity.x = -5
+				}
+			}
 		} else if (keys.d.pressed && lastKey === 'd') {
-			this.velocity.x = 5
+			for (let i = 0; i < gameBoard.boundaries.length; i++) {
+				const boundary = gameBoard.boundaries[i]
+				if (
+					gameBoard.circleCollisionWithRectangle({
+						circle: {
+							...this,
+							velocity: {
+								x: 5,
+								y: 0,
+							},
+						},
+						rectangle: boundary,
+					})
+				) {
+					this.velocity.x = 0
+					break
+				} else {
+					this.velocity.x = 5
+				}
+			}
 		}
-		this.update(c)
+	}
+	stop() {
+		this.velocity.x = 0
+		this.velocity.y = 0
 	}
 }
 

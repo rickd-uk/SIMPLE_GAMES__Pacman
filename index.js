@@ -13,7 +13,7 @@ const gameBoard = new GameBoard(c)
 const player = new Player({
 	position: {
 		x: Boundary.width + Boundary.width / 2,
-		y: Boundary.height + Boundary.height / 2,
+		y: Boundary.height + Boundary.height / 2 + 20,
 	},
 	velocity: {
 		x: 0,
@@ -25,8 +25,15 @@ const controller = new Controller(player)
 function animate() {
 	requestAnimationFrame(animate)
 	c.clearRect(0, 0, canvas.width, canvas.height)
-	gameBoard.draw(c)
-	player.move(c, { controller })
+
+	player.move({ c, controller, gameBoard })
+
+	gameBoard.boundaries.forEach((boundary) => {
+		boundary.draw(c)
+		gameBoard.checkCollision(c, player)
+	})
+	// gameBoard.draw(c, player)
+	player.update(c)
 }
 
 animate()
