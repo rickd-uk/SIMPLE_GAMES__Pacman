@@ -1,33 +1,114 @@
 import Boundary from './Boundary.js'
 
 class GameBoard {
-	constructor(c) {
+	static PARENT_DIR = './images/boardPieces'
+	static BOARD_START_POS_X = 100
+	static BOARD_START_POS_Y = 50
+
+	constructor() {
+		// this.map = [
+		// 	['┌', '-', '-', '-', '-', '-', '┐'],
+		// 	['|', ' ', ' ', ' ', ' ', ' ', '|'],
+		// 	['|', ' ', '▀', ' ', '▀', ' ', '|'],
+		// 	['|', ' ', ' ', ' ', ' ', ' ', '|'],
+		// 	['|', ' ', '▀', ' ', '▀', ' ', '|'],
+		// 	['|', ' ', ' ', ' ', ' ', ' ', '|'],
+		// 	['└', '-', '-', '-', '-', '-', '┘'],
+		// ]
 		this.map = [
-			['-', '-', '-', '-', '-', '-', '-'],
-			['-', ' ', ' ', ' ', ' ', ' ', '-'],
-			['-', ' ', '-', ' ', '-', ' ', '-'],
-			['-', ' ', ' ', ' ', ' ', ' ', '-'],
-			['-', ' ', '-', ' ', '-', ' ', '-'],
-			['-', ' ', ' ', ' ', ' ', ' ', '-'],
-			['-', '-', '-', '-', '-', '-', '-'],
+			['┌', '-', '-', '-', '-', '-', '-', '-', '-', '-', '┐'],
+			['|', '.', '.', '.', '.', '.', '.', '.', '.', '.', '|'],
+			['|', '.', '▀', '.', '[', '7', ']', '.', '▀', '.', '|'],
+			['|', '.', '.', '.', '.', '_', '.', '.', '.', '.', '|'],
+			['|', '.', '[', ']', '.', '.', '.', '[', ']', '.', '|'],
+			['|', '.', '.', '.', '.', '^', '.', '.', '.', '.', '|'],
+			['|', '.', '▀', '.', '[', '+', ']', '.', '▀', '.', '|'],
+			['|', '.', '.', '.', '.', '_', '.', '.', '.', '.', '|'],
+			['|', '.', '[', ']', '.', '.', '.', '[', ']', '.', '|'],
+			['|', '.', '.', '.', '.', '^', '.', '.', '.', '.', '|'],
+			['|', '.', '▀', '.', '[', '~', ']', '.', '▀', '.', '|'],
+			['|', '.', '.', '.', '.', '.', '.', '.', '.', 'p', '|'],
+			['└', '-', '-', '-', '-', '-', '-', '-', '-', '-', '┘'],
 		]
 		this.boundaries = []
+
 		this.map.forEach((row, i) => {
 			row.forEach((symbol, j) => {
 				switch (symbol) {
 					case '-':
-						this.boundaries.push(
-							new Boundary({
-								position: {
-									x: j * Boundary.width,
-									y: i * Boundary.height,
-								},
-							}),
-						)
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeHorizontal.png`, i, j)
+						break
+					case '|':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeVertical.png`, i, j)
+						break
+					case '┌':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeCorner1.png`, i, j)
+						break
+					case '┐':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeCorner2.png`, i, j)
+						break
+					case '┘':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeCorner3.png`, i, j)
+						break
+					case '└':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeCorner4.png`, i, j)
+						break
+					case '▀':
+						this.addPiece(`${GameBoard.PARENT_DIR}/block.png`, i, j)
+						break
+
+					case '[':
+						this.addPiece(`${GameBoard.PARENT_DIR}/capLeft.png`, i, j)
+						break
+
+					case ']':
+						this.addPiece(`${GameBoard.PARENT_DIR}/capRight.png`, i, j)
+						break
+					case '_':
+						this.addPiece(`${GameBoard.PARENT_DIR}/capBottom.png`, i, j)
+						break
+					case '^':
+						this.addPiece(`${GameBoard.PARENT_DIR}/capTop.png`, i, j)
+						break
+
+					case '+':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeCross.png`, i, j)
+						break
+
+					case '~':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeConnectorTop.png`, i, j)
+						break
+
+					case '6':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeConnectorRight.png`, i, j)
+						break
+					case '7':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeConnectorBottom.png`, i, j)
+						break
+					case '8':
+						this.addPiece(`${GameBoard.PARENT_DIR}/pipeConnectorLeft.png`, i, j)
 						break
 				}
 			})
 		})
+	}
+
+	addPiece(src, i, j) {
+		this.boundaries.push(
+			new Boundary({
+				image: this.createImage(src),
+				position: {
+					x: j * Boundary.width + GameBoard.BOARD_START_POS_X,
+					y: i * Boundary.height + GameBoard.BOARD_START_POS_Y,
+				},
+			}),
+		)
+	}
+
+	createImage(src) {
+		this.image = new Image()
+		this.image.src = src
+		return this.image
 	}
 
 	circleCollisionWithRectangle({ circle, rectangle }) {

@@ -12,8 +12,8 @@ canvas.height = innerHeight
 const gameBoard = new GameBoard(c)
 const player = new Player({
 	position: {
-		x: Boundary.width + Boundary.width / 2,
-		y: Boundary.height + Boundary.height / 2 + 20,
+		x: Boundary.width + Boundary.width / 2 + GameBoard.BOARD_START_POS_X,
+		y: Boundary.height + Boundary.height / 2 + GameBoard.BOARD_START_POS_Y,
 	},
 	velocity: {
 		x: 0,
